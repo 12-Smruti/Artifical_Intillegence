@@ -1,0 +1,61 @@
+n = int(input("Enter N: "))
+
+def printBoard(board):
+    for i in range(n):
+        for j in range(n):
+            print(board[i][j], end=" ")
+        print()
+
+def isSafe(row, col, slashCode, backslashCode, rowLookup, slashLookup, backslashLookup):
+    if (slashLookup[slashCode[row][col]] or
+        backslashLookup[backslashCode[row][col]] or
+        rowLookup[row]):
+        return False
+    return True
+
+def solvable(board, col, slashCode, backslashCode, rowLookup, slashLookup, backslashLookup):
+    if col >= n:
+        return True
+
+    for i in range(n):
+        if isSafe(i, col, slashCode, backslashCode, rowLookup, slashLookup, backslashLookup):
+            board[i][col] = 1
+            rowLookup[i] = True
+            slashLookup[slashCode[i][col]] = True
+            backslashLookup[backslashCode[i][col]] = True
+
+            if solvable(board, col + 1, slashCode, backslashCode, rowLookup, slashLookup, backslashLookup):
+                return True
+
+            # Backtrack
+            board[i][col] = 0
+            rowLookup[i] = False
+            slashLookup[slashCode[i][col]] = False
+            backslashLookup[backslashCode[i][col]] = False
+
+    return False
+
+def main():
+    board = [[0 for _ in range(n)] for _ in range(n)]
+    slashCode = [[0 for _ in range(n)] for _ in range(n)]
+    backslashCode = [[0 for _ in range(n)] for _ in range(n)]
+
+    rowLookup = [False] * n
+    x = 2 * n - 1
+    slashLookup = [False] * x
+    backslashLookup = [False] * x
+
+    for rr in range(n):
+        for cc in range(n):
+            slashCode[rr][cc] = rr + cc
+            backslashCode[rr][cc] = rr - cc + (n - 1)
+
+    if not solvable(board, 0, slashCode, backslashCode, rowLookup, slashLookup, backslashLookup):
+        print("Solution Does not Exist")
+        return False
+
+    print("One possible solution:")
+    printBoard(board)
+    return True
+
+main()
