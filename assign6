@@ -1,0 +1,55 @@
+# Define rules
+rules = {
+    "rule1": "If the employee meets all project deadlines, add 20 points to their score.",
+    "rule2": "If the employee consistently exceeds expectations, add 30 points to their score.",
+    "rule3": "If the employee shows initiative and takes on additional responsibilities, add 15 points to their score.",
+    "rule4": "If the employee is frequently absent or misses deadlines, subtract 25 points from their score.",
+    "rule5": "If the employee consistently performs below expectations, subtract 35 points from their score."
+}
+
+# Function to evaluate performance score
+def evaluate_employee_performance(deadlines_met, expectations_exceeded, initiative_taken, absences, performance_below_expectations):
+    score = 0
+    if deadlines_met:
+        score += 20
+    if expectations_exceeded:
+        score += 30
+    if initiative_taken:
+        score += 15
+    if absences:
+        score -= 25
+    if performance_below_expectations:
+        score -= 35
+    return score
+
+# Collect employee data
+employee_data = {}
+n = int(input("Enter the number of employees: "))
+
+for i in range(n):
+    name = input(f"\nEnter the name of employee #{i+1}: ")
+    data = {
+        "deadlines_met": bool(int(input("Did they meet deadlines? (1 for yes, 0 for no): "))),
+        "expectations_exceeded": bool(int(input("Did they exceed expectations? (1/0): "))),
+        "initiative_taken": bool(int(input("Did they take initiative? (1/0): "))),
+        "absences": bool(int(input("Were they frequently absent? (1/0): "))),
+        "performance_below_expectations": bool(int(input("Did they perform below expectations? (1/0): ")))
+    }
+    employee_data[name] = data
+
+# Display rules
+print("\nRules for employee evaluation:")
+for rule in rules.values():
+    print(f"- {rule}")
+
+# Evaluate and display scores
+print("\nEmployee Performance Scores:")
+for name, data in employee_data.items():
+    score = evaluate_employee_performance(
+        data["deadlines_met"],
+        data["expectations_exceeded"],
+        data["initiative_taken"],
+        data["absences"],
+        data["performance_below_expectations"]
+    )
+    print(f"{name}: {score} points")
