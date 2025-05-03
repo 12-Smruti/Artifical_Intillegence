@@ -1,0 +1,109 @@
+g = 0
+
+def print_board(elements):
+    for i in range(9):
+        if i % 3 == 0:
+            print()
+        if elements[i] == -1:
+            print("_", end=" ")
+        else:
+            print(elements[i], end=" ")
+    print()
+
+def solvable(start):
+    inv = 0
+    for i in range(9):
+        if start[i] == -1:
+            continue
+        for j in range(i + 1, 9):
+            if start[j] == -1:
+                continue
+            if start[i] > start[j]:
+                inv += 1
+    return inv % 2 == 0
+
+def heuristic(start, goal):
+    h = 0
+    for i in range(9):
+        if start[i] == -1:
+            continue
+        j = goal.index(start[i])
+        h += abs(j - i) // 3 + abs(j - i) % 3
+    return h + g
+
+def move_left(state, pos):
+    state[pos], state[pos - 1] = state[pos - 1], state[pos]
+
+def move_right(state, pos):
+    state[pos], state[pos + 1] = state[pos + 1], state[pos]
+
+def move_up(state, pos):
+    state[pos], state[pos - 3] = state[pos - 3], state[pos]
+
+def move_down(state, pos):
+    state[pos], state[pos + 3] = state[pos + 3], state[pos]
+
+def movetile(start, goal):
+    empty_at = start.index(-1)
+    row = empty_at // 3
+    col = empty_at % 3
+
+    options = []
+    if col > 0:
+        t = start[:]
+        move_left(t, empty_at)
+        options.append((heuristic(t, goal), t))
+    if col < 2:
+        t = start[:]
+        move_right(t, empty_at)
+        options.append((heuristic(t, goal), t))
+    if row > 0:
+        t = start[:]
+        move_up(t, empty_at)
+        options.append((heuristic(t, goal), t))
+    if row < 2:
+        t = start[:]
+        move_down(t, empty_at)
+        options.append((heuristic(t, goal), t))
+
+    if options:
+        _, best = min(options, key=lambda x: x[0])
+        start[:] = best[:]
+
+def solve_eight(start, goal):
+    global g
+    g += 1
+    movetile(start, goal)
+    print_board(start)
+    f = heuristic(start, goal)
+    if f == g:
+        print("Solved in {} moves.".format(f))
+        return
+    solve_eight(start, goal)
+
+def main():
+    global g
+    start = []
+    goal = []
+
+    print("Enter the start state (use -1 for empty):")
+    for _ in range(9):
+        start.append(int(input()))
+
+    print("Enter the goal state (use -1 for empty):")
+    for _ in range(9):
+        goal.append(int(input()))
+
+    print("\nStart State:")
+    print_board(start)
+    print("\nGoal State:")
+    print_board(goal)
+
+    if solvable(start):
+        solve_eight(start, goal)
+        print("Solved in {} moves.".format(g))
+    else:
+        print("Not possible to solve.")
+
+if __name__ == "__main__":
+    main()
