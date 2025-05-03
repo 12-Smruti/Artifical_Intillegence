@@ -46,8 +46,11 @@ for i in range(num_edges):
     g.add_edge(u, v)
 
 start_vertex = int(input("Enter the starting vertex for DFS and BFS: "))
-print(f"DFS starting from vertex {start_vertex}:")
-g.dfs(start_vertex)
+if start_vertex not in g.graph:
+    print(f"Error: Vertex {start_vertex} not found in the graph.")
+else:
+    print(f"DFS starting from vertex {start_vertex}:")
+    g.dfs(start_vertex)
 
-print(f"BFS starting from vertex {start_vertex}:")
-g.bfs(start_vertex)
+    print(f"BFS starting from vertex {start_vertex}:")
+    g.bfs(start_vertex)
