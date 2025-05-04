@@ -1,0 +1,42 @@
+import heapq
+
+def dijkstra(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    min_heap = [(0, start)]
+
+    while min_heap:
+        current_distance, current_node = heapq.heappop(min_heap)
+
+        if current_distance > distances[current_node]:
+            continue
+
+        for neighbor, weight in graph[current_node]:
+            distance = current_distance + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(min_heap, (distance, neighbor))
+
+    return distances
+# Build graph from user input
+graph = {}
+n = int(input("Enter number of vertices: "))
+e = int(input("Enter number of edges: "))
+
+print("Enter each edge in the format: node1 node2 weight")
+for _ in range(e):
+    u, v, w = input().split()
+    w = int(w)
+    if u not in graph:
+        graph[u] = []
+    if v not in graph:
+        graph[v] = []
+    graph[u].append((v, w))
+    # For undirected graph also add: graph[v].append((u, w))
+
+start = input("Enter start node: ")
+result = dijkstra(graph, start)
+
+print(f"\nShortest distances from '{start}':")
+for node in sorted(result):
+    print(f"{start} → {node} = {result[node]}")
