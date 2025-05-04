@@ -1,0 +1,50 @@
+import heapq
+
+def prim_mst(graph, start):
+    visited = set()
+    min_heap = [(0, start)]  # (weight, node)
+    mst_cost = 0
+    mst_edges = []
+
+    while min_heap and len(visited) < len(graph):
+        weight, node = heapq.heappop(min_heap)
+
+        if node in visited:
+            continue
+
+        visited.add(node)
+        mst_cost += weight
+
+        if weight != 0:
+            mst_edges.append((prev_node, node, weight))
+
+        for neighbor, edge_weight in graph[node]:
+            if neighbor not in visited:
+                heapq.heappush(min_heap, (edge_weight, neighbor))
+                prev_node = node
+
+    return mst_cost, mst_edges
+# Build the graph from user input
+graph = {}
+n = int(input("Enter number of vertices: "))
+e = int(input("Enter number of edges: "))
+
+print("Enter each edge in the format: node1 node2 weight")
+for _ in range(e):
+    u, v, w = input().split()
+    w = int(w)
+    if u not in graph:
+        graph[u] = []
+    if v not in graph:
+        graph[v] = []
+    graph[u].append((v, w))
+    graph[v].append((u, w))  # Because the graph is undirected
+
+start_node = input("Enter the starting node: ")
+
+cost, edges = prim_mst(graph, start_node)
+
+print("\nMinimum Spanning Tree edges:")
+for u, v, w in edges:
+    print(f"{u} - {v} : {w}")
+print(f"Total cost of MST: {cost}")
