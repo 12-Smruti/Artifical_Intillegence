@@ -6,10 +6,13 @@ def greedy_selection_sort(arr):
             if arr[j] < arr[min_index]:
                 min_index = j
         arr[i], arr[min_index] = arr[min_index], arr[i]
+        print(f"After pass {i + 1}: {arr}")  # Show array after each pass
     return arr
 
+# Take input from the user
 input_str = input("Enter the elements of the array separated by spaces: ")
 arr = list(map(int, input_str.strip().split()))
 
+# Call the sorting function
 sorted_arr = greedy_selection_sort(arr)
 print("Sorted array using Greedy Selection Sort:", sorted_arr)
