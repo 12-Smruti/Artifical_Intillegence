@@ -1,13 +1,11 @@
-import heapq
-
 def prim_mst(graph, start):
     visited = set()
-    min_heap = [(0, start)]  # (weight, node)
+    min_heap = [(0, None, start)]  # (weight, from_node, to_node)
     mst_cost = 0
     mst_edges = []
 
     while min_heap and len(visited) < len(graph):
-        weight, node = heapq.heappop(min_heap)
+        weight, from_node, node = heapq.heappop(min_heap)
 
         if node in visited:
             continue
@@ -15,16 +13,16 @@ def prim_mst(graph, start):
         visited.add(node)
         mst_cost += weight
 
-        if weight != 0:
-            mst_edges.append((prev_node, node, weight))
+        if from_node is not None:
+            mst_edges.append((from_node, node, weight))
 
         for neighbor, edge_weight in graph[node]:
             if neighbor not in visited:
-                heapq.heappush(min_heap, (edge_weight, neighbor))
-                prev_node = node
+                heapq.heappush(min_heap, (edge_weight, node, neighbor))
 
     return mst_cost, mst_edges
-# Build the graph from user input
+
+
 graph = {}
 n = int(input("Enter number of vertices: "))
 e = int(input("Enter number of edges: "))
