@@ -1,0 +1,72 @@
+def is_safe(node, color, assignment, graph):
+    for neighbor in graph[node]:
+        if assignment[neighbor] == color:
+            return False
+    return True
+
+def select_unassigned_node(assignment, graph, m):
+    unassigned_nodes = [i for i in range(len(graph)) if assignment[i] == -1]
+    if not unassigned_nodes:
+        return None
+    min_node = unassigned_nodes[0]
+    min_remaining = m
+    for node in unassigned_nodes:
+        count = 0
+        for color in range(m):
+            if is_safe(node, color, assignment, graph):
+                count += 1
+        if count < min_remaining:
+            min_remaining = count
+            min_node = node
+    return min_node
+
+def graph_coloring(graph, m):
+    n = len(graph)
+    assignment = [-1] * n
+    solutions = []
+
+    def backtrack():
+        if -1 not in assignment:
+            solutions.append(assignment[:])
+            return True  # Stop after finding one solution
+
+        node = select_unassigned_node(assignment, graph, m)
+        if node is None:
+            return False
+
+        for color in range(m):
+            if is_safe(node, color, assignment, graph):
+                assignment[node] = color
+                if backtrack():
+                    return True
+                assignment[node] = -1
+        return False
+
+    if backtrack():
+        return solutions[0]
+    else:
+        return None
+
+n = int(input("Enter the number of nodes in the graph: "))
+e = int(input("Enter the number of edges in the graph: "))
+graph = {i: [] for i in range(n)}
+
+print("Enter the edges (u v) one by one (0-based indexing):")
+for _ in range(e):
+    u, v = map(int, input().split())
+    graph[u].append(v)
+    graph[v].append(u) 
+
+m = int(input("Enter the number of colors: "))
+
+print("\nGraph:")
+for node, neighbors in graph.items():
+    print(f"Node {node}: {neighbors}")
+    
+result = graph_coloring(graph, m)
+if result:
+    print("\nColoring is possible.")
+    for i, color in enumerate(result):
+        print(f"Node {i} → Color {color}")
+else:
+    print("No valid coloring exists with the given number of colors.")
