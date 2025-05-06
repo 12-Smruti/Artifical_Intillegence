@@ -1,0 +1,56 @@
+def evaluate_performance(punctuality, task_completion, teamwork, innovation, communication):
+    score = 0
+
+    if punctuality >= 8:
+        score += 2
+    elif punctuality >= 5:
+        score += 1
+
+    if task_completion >= 8:
+        score += 2
+    elif task_completion >= 5:
+        score += 1
+
+    if teamwork >= 8:
+        score += 2
+    elif teamwork >= 5:
+        score += 1
+
+    if innovation >= 8:
+        score += 2
+    elif innovation >= 5:
+        score += 1
+
+    if communication >= 8:
+        score += 2
+    elif communication >= 5:
+        score += 1
+
+    # Decision rules based on total score out of 10
+    if score >= 9:
+        performance = "Excellent"
+    elif score >= 7:
+        performance = "Good"
+    elif score >= 5:
+        performance = "Average"
+    else:
+        performance = "Poor"
+
+    return performance
+
+
+# Sample usage
+def main():
+    print("Rate the employee on a scale of 1 to 10 for the following:")
+    punctuality = int(input("Punctuality: "))
+    task_completion = int(input("Task Completion: "))
+    teamwork = int(input("Teamwork: "))
+    innovation = int(input("Innovation: "))
+    communication = int(input("Communication: "))
+
+    result = evaluate_performance(punctuality, task_completion, teamwork, innovation, communication)
+    print(f"\nOverall Performance Evaluation: {result}")
+
+
+if __name__ == "__main__":
+    main()
