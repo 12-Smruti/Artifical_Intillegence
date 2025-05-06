@@ -38,19 +38,29 @@ def evaluate_performance(punctuality, task_completion, teamwork, innovation, com
 
     return performance
 
+def get_valid_input(prompt):
+    while True:
+        try:
+            value = int(input(prompt))
+            if 1 <= value <= 10:
+                return value
+            else:
+                print(" Please enter a number between 1 and 10.")
+        except ValueError:
+            print(" Invalid input. Please enter a numeric value.")
+
 
 # Sample usage
 def main():
     print("Rate the employee on a scale of 1 to 10 for the following:")
-    punctuality = int(input("Punctuality: "))
-    task_completion = int(input("Task Completion: "))
-    teamwork = int(input("Teamwork: "))
-    innovation = int(input("Innovation: "))
-    communication = int(input("Communication: "))
+    punctuality = get_valid_input("Punctuality: ")
+    task_completion = get_valid_input("Task Completion: ")
+    teamwork = get_valid_input("Teamwork: ")
+    innovation = get_valid_input("Innovation: ")
+    communication = get_valid_input("Communication: ")
 
     result = evaluate_performance(punctuality, task_completion, teamwork, innovation, communication)
     print(f"\nOverall Performance Evaluation: {result}")
-
 
 if __name__ == "__main__":
     main()
